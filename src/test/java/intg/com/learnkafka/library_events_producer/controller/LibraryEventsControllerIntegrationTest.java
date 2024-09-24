@@ -22,6 +22,7 @@ import org.springframework.test.context.TestPropertySource;
 import util.TestUtil;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,11 +46,9 @@ class LibraryEventsControllerIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        var configs = new HashMap<>(KafkaTestUtils.consumerProps("group1", "true", embeddedKafkaBroker));
-        configs.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        Map<String, Object> configs = new HashMap<>(KafkaTestUtils.consumerProps("group1", "true", embeddedKafkaBroker));
         consumer = new DefaultKafkaConsumerFactory<>(configs, new IntegerDeserializer(), new StringDeserializer())
                 .createConsumer();
-
         embeddedKafkaBroker.consumeFromAllEmbeddedTopics(consumer);
     }
 
